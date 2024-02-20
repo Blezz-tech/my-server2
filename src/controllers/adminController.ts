@@ -16,6 +16,25 @@ class AdminController {
     });
   }
 
+  async isExist(username: any, password: any) {
+    const isUserExist = await db.getRepository(Admins).exist({
+      where: {
+        "username": username,
+        "password": password
+      }
+    });
+    return isUserExist;
+  }
+
+  async getId(username: any, password: any) {
+    const result = await db.getRepository(Admins).findOne({
+      where: {
+        "username": username,
+        "password": password
+      }
+    });
+    return result;
+  }
 }
 
 export const adminController = new AdminController();
