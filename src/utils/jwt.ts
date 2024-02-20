@@ -1,14 +1,12 @@
-import jwt from 'jsonwebtoken';
-import { jwt_secret } from '../config';
+const crypto = require('crypto');
+
 
 const createJWT = (user : any) => {
-  const token : string = jwt.sign(user, jwt_secret);
-  return token;
+  return crypto.randomBytes(64).toString('hex');
+
 };
 
-const isTokenValid = (token : string) => jwt.verify(token, jwt_secret);
 
 export {
-  createJWT,
-  isTokenValid,
+  createJWT
 };

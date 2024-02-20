@@ -24,6 +24,5 @@ const db = new DataSource({
 
 const port = process.env.PORT || 5000
 
-const jwt_secret = process.env.JWT_SECRET;
 
-export { port, db, jwt_secret }
+export { port, db }
