@@ -9,13 +9,14 @@ const checkEmpty = (records: any) =>
         let isError = false;
 
         records.forEach(record => {
-            if (record == null) {
+            if (!req.body.hasOwnProperty(record)) {
                 output.errors[record] = [`The ${record} field is required.`];
+                isError = true;
             }
         });
 
         if (isError) {
-            res.status(401).send(output);
+            return res.status(401).send(output);
         }
         next();
     };
