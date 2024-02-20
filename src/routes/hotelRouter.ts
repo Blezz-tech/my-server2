@@ -3,16 +3,12 @@ const hotelRouter = Router();
 
 import { checkAuth } from "../utils/auth";
 import { hotelController } from "../controllers/hotelController";
-import { body } from "express-validator";
+
 import { checkEmpty } from "../utils/helper";
 
 hotelRouter.post("/",
     checkAuth,
-    [
-        body("name").notEmpty(),
-        body("number").notEmpty()
-    ],
-    checkEmpty,
+    checkEmpty(["name", "number"]),
     hotelController.create);
 
 hotelRouter.get("/",
