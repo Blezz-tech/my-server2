@@ -49,13 +49,13 @@ class ClientController {
   async destroy(req: Request, res: Response) {
     const id: any = req.params.id;
 
-    const isClientExist = await db.getRepository(Clients).exist({
+    const isExist = await db.getRepository(Clients).exist({
       where: {
         "id": id
       }
     });
 
-    if (!isClientExist) {
+    if (!isExist) {
       return res.status(403).json({
         "error": {
           "message": "Not found"
@@ -75,13 +75,13 @@ class ClientController {
   async update(req: Request, res: Response) {
     const id: any = req.params.id;
 
-    const isClientExist = await db.getRepository(Clients).exist({
+    const isExist = await db.getRepository(Clients).exist({
       where: {
         "id": id
       }
     });
 
-    if (!isClientExist) {
+    if (!isExist) {
       return res.status(403).json({
         "error": {
           "message": "Not found"
@@ -90,7 +90,7 @@ class ClientController {
     }
 
     const { fio, email, phone, id_rooms, birth_date } = req.body;
-    const clients_settings = {
+    const update_property = {
       "id_rooms": id_rooms,
       "fio": fio,
       "email": email,
@@ -98,18 +98,19 @@ class ClientController {
       "birth_date": birth_date
     };
 
-    Object.keys(clients_settings).forEach(key =>
-      clients_settings[key] === undefined
-        ? delete clients_settings[key]
-        : {});
+    Object.keys(update_property).forEach(key => {
+      if (!update_property.hasOwnProperty(key)) {
+        delete update_property[key];
+      }
+    });
 
-    const property = await db.getRepository(Clients).findOne({
+    const old_property = await db.getRepository(Clients).findOne({
       where: { id }
     });
 
     const result = await db.getRepository(Clients).save({
-      ...property, // existing fields
-      ...clients_settings // updated fields
+      ...old_property, // existing fields
+      ...update_property // updated fields
     });
 
     res.status(200).send({
@@ -118,6 +119,13 @@ class ClientController {
         "message": "Updated"
       }
     });
+  }
+
+  async isExist(params: any) {
+    const isExist = await
+      db.getRepository(Clients)
+        .exist({ where: params });
+    return isExist;
   }
 
   async showInRooms(req: Request, res: Response) {

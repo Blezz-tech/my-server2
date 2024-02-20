@@ -6,7 +6,7 @@ class RoomController {
   async create(req: Request, res: Response) {
     const { name, desc_data } = req.body;
 
-    const new_room = await db.getRepository(Rooms).create({
+    const new_room = db.getRepository(Rooms).create({
       "name": name,
       "desc_data": desc_data
     });
@@ -22,11 +22,7 @@ class RoomController {
   async destroy(req: Request, res: Response) {
     const id: any = req.params.id;
 
-    const isRoomExist = await db.getRepository(Rooms).exist({
-      where: {
-        "id": id
-      }
-    });
+    const isRoomExist = await this.isExist(id);
 
     if (!isRoomExist) {
       return res.status(403).json({
@@ -43,6 +39,13 @@ class RoomController {
         "message": "Deleted"
       }
     });
+  }
+
+  async isExist(id: any) {
+    const isExist = await
+      db.getRepository(Rooms)
+        .exist({ where: { "id": id } });
+    return isExist;
   }
 
   async getAll(req: Request, res: Response) {

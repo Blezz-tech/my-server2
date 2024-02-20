@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { Admins } from "../entity/Admins"
 import { db } from "../config"
 import { createJWT } from "../utils/jwt";
 import { Tokens } from '../entity/Tokens';
@@ -35,6 +34,13 @@ class TokenController {
         "token_user": jwt_token,
       },
     });
+  }
+
+  isExist(token: any) {
+    const isExist = 
+      db.getRepository(Tokens)
+        .exist({ where: { "token": token } });
+    return isExist;
   }
 }
 

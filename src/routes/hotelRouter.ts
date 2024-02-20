@@ -12,10 +12,12 @@ hotelRouter.post("/",
     hotelController.create);
 
 hotelRouter.get("/",
+    checkAuth,
     hotelController.getAll);
 
 
 hotelRouter.delete("/:id",
+    checkAuth,
     hotelController.destroy);
 
 
